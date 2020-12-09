@@ -1,0 +1,15 @@
+
+
+                 C
+                            
+ C          PP       C
+                            M
+ S  S   C    S             MMM
+BBBBBBBBBBBBBBBBxBBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBBxBBBBBBBBBBBBBBBB
+
+s = spike
+c = coin
+PP = plate
+M = enemy_mob
+b = blocks
