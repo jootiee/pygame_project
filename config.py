@@ -116,3 +116,4 @@ MAP = {
 }
 
 SOLID_BLOCKS = 'BS'
+
