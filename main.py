@@ -24,19 +24,9 @@ class Sprite(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect.topleft)
 
-    def border_check(self):
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > WIN_SIZE[0]:
-            self.rect.right = WIN_SIZE[0]
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > WIN_SIZE[1]:
-            self.rect.bottom = WIN_SIZE[1]
-
 
 class Spike(Sprite):
-    def __init__(self, x=0, y=0, size=100, damage=25, speed=10, image=PLAYER_ASSETS['idle'][0]):
+    def __init__(self, x=0, y=0, size=100, damage=10, speed=10, image=PLAYER_ASSETS['idle'][0]):
         if x == None:
             x = random.randint(0, WIN_SIZE[0] - size)
         if y == None:
@@ -89,7 +79,7 @@ class Player(Sprite):
     medkits = None
     damage = None
 
-    def __init__(self, x=0, y=0, size=100, speed=10, image=PLAYER_ASSETS['idle']):
+    def __init__(self, x=0, y=0, size=TILE_SIZE, speed=10, image=PLAYER_ASSETS['idle']):
         Sprite.__init__(self, x, y, size, speed, image)
         self.money = 0
         self.hp_max = 100
@@ -104,35 +94,68 @@ class Player(Sprite):
         self.image_flipped = pygame.transform.flip(self.image, True, False)
         self.delay = 500
         self.cooldown = self.delay
+        self.on_ground = False
+        self.speed_y = 0
+        self.jump_force = 10
+        self.speed_x = 0
 
-    def take_damage(self, ms, damage):
-        if self.cooldown > 0:
-            self.cooldown -= ms
-            return 0
-        if self.cooldown <= 0:
-            self.cooldown = 0
-        if self.cooldown == 0:
-            self.cooldown = self.delay
-            return damage
 
     def update(self, up, down, left, right, ms):
-        if left == right:
-            pass
-        elif left:
-            self.rect.x -= self.speed
-            self.image = self.image_flipped
+        if self.rect.bottom == WIN_SIZE[1]:
+            self.on_ground = True
         else:
-            self.rect.x += self.speed
-            self.image = self.image_main
+            self.on_ground = False
+
+        if not self.on_ground:
+            self.speed_y += GRAVITY
+        else:
+            self.speed_y = 0
+
         if up == down:
             pass
         elif up:
-            self.rect.y -= self.speed
+            if self.on_ground:
+                self.speed_y = -self.jump_force 
+
+        self.rect.bottom += self.speed_y
+
+        for block in self.solid_blocks:
+            if pygame.sprite.collide_rect(self, block):
+                if self.speed_y < 0:
+                    self.rect.top = block.rect.bottom
+                else:
+                    self.rect.bottom = block.rect.top
+                    self.on_ground = True
+
+
+
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > WIN_SIZE[1]:
+            self.rect.bottom = WIN_SIZE[1]
+
+        if left == right:
+            self.speed_x = 0
+        elif left:
+            self.speed_x = -self.speed
+            self.image = self.image_flipped
         else:
-            self.rect.y += self.speed
+            self.speed_x = +self.speed
+            self.image = self.image_main
+        
+        self.rect.x += self.speed_x
 
-        self.border_check()
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > WIN_SIZE[0]:
+            self.rect.right = WIN_SIZE[0]
+        
+        self.collide_check(ms)
 
+        if self.hp <= 0:
+            self.respawn()
+
+    def collide_check(self, ms):
         if self.coins:
             for coin in self.coins:
                 if pygame.sprite.collide_rect(self, coin):
@@ -155,8 +178,16 @@ class Player(Sprite):
                         self.hp = self.maxhp
                     medkit.kill()
 
-        if self.hp <= 0:
-            self.respawn()
+
+    def take_damage(self, ms, damage):
+        if self.cooldown > 0:
+            self.cooldown -= ms
+            return 0
+        if self.cooldown <= 0:
+            self.cooldown = 0
+        if self.cooldown == 0:
+            self.cooldown = self.delay
+            return damage
 
     def respawn(self):
         self.money = round(self.money * 0.9)
@@ -180,6 +211,7 @@ class Game:
         Player.coins = self.coins
         Player.spikes = self.spikes
         Player.medkits = self.medkits
+        Player.solid_blocks = self.solid_blocks
         self.solid_blocks = pygame.sprite.Group()
         self.load_map()
         # for _ in range(random.randint(1, 25)):

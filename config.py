@@ -3,11 +3,11 @@
 TILE_SIZE = 64
 WIN_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
 FPS = 60
+GRAVITY = 0.25
 
-# COLOR =     R    G    B
 WHITE = (255, 255, 255)
 BLACK = (0,   0,   0)
-BG_COLOR = (135, 206, 250)  # lightskyblue
+BG_COLOR = (76, 81, 109)
 
 current_dir = os.path.dirname(__file__)
 assets = os.path.join(current_dir, 'assets')
