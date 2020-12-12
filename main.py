@@ -26,7 +26,7 @@ class Sprite(pygame.sprite.Sprite):
 
 
 class Spike(Sprite):
-    def __init__(self, x=0, y=0, size=100, damage=10, speed=10, image=PLAYER_ASSETS['idle'][0]):
+    def __init__(self, x=0, y=0, size=TILE_SIZE, damage=10, speed=10, image=PLAYER_ASSETS['idle'][0]):
         if x == None:
             x = random.randint(0, WIN_SIZE[0] - size)
         if y == None:
@@ -36,7 +36,7 @@ class Spike(Sprite):
 
 
 class Medkit(Sprite):
-    def __init__(self, x=None, y=None, size=50, speed=0, image=MEDKIT):
+    def __init__(self, x=None, y=None, size=TILE_SIZE, speed=0, image=MEDKIT):
         if x == None:
             x = random.randint(0, WIN_SIZE[0] - size)
         if y == None:
@@ -46,7 +46,7 @@ class Medkit(Sprite):
 
 
 class Coin(Sprite):
-    def __init__(self, x=None, y=None, value=5, size=50, speed=10, image=COINS[0]):
+    def __init__(self, x=None, y=None, value=5, size=TILE_SIZE, speed=10, image=COINS[0]):
         if x is None:
             self.x = random.randint(0, WIN_SIZE[0] - size)
         else:
@@ -99,23 +99,17 @@ class Player(Sprite):
         self.jump_force = 10
         self.speed_x = 0
 
-
     def update(self, up, down, left, right, ms):
-        if self.rect.bottom == WIN_SIZE[1]:
-            self.on_ground = True
-        else:
-            self.on_ground = False
-
+        self.collide_check(ms)
+        if up == down:
+            pass
         if not self.on_ground:
             self.speed_y += GRAVITY
         else:
             self.speed_y = 0
-
-        if up == down:
-            pass
-        elif up:
-            if self.on_ground:
-                self.speed_y = -self.jump_force 
+        if up and self.on_ground:
+            self.speed_y -= self.jump_force
+            self.on_ground = False
 
         self.rect.bottom += self.speed_y
 
@@ -123,12 +117,11 @@ class Player(Sprite):
             if pygame.sprite.collide_rect(self, block):
                 if self.speed_y < 0:
                     self.rect.top = block.rect.bottom
+                    self.speed_y = 0
                 else:
                     self.rect.bottom = block.rect.top
                     self.on_ground = True
-
-
-
+                
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > WIN_SIZE[1]:
@@ -142,14 +135,14 @@ class Player(Sprite):
         else:
             self.speed_x = +self.speed
             self.image = self.image_main
-        
+
         self.rect.x += self.speed_x
 
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > WIN_SIZE[0]:
             self.rect.right = WIN_SIZE[0]
-        
+
         self.collide_check(ms)
 
         if self.hp <= 0:
@@ -178,7 +171,6 @@ class Player(Sprite):
                         self.hp = self.maxhp
                     medkit.kill()
 
-
     def take_damage(self, ms, damage):
         if self.cooldown > 0:
             self.cooldown -= ms
@@ -199,7 +191,6 @@ class Game:
     def __init__(self):
         pygame.init()
         self.display = pygame.display.set_mode(WIN_SIZE)
-        pygame.display.set_caption('Вторые шаги котика')
         self.clock = pygame.time.Clock()
         self.running = True
         self.down = self.up = self.left = self.right = False
@@ -208,19 +199,12 @@ class Game:
         self.spikes = pygame.sprite.Group()
         self.medkits = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.solid_blocks = pygame.sprite.Group()
         Player.coins = self.coins
         Player.spikes = self.spikes
         Player.medkits = self.medkits
         Player.solid_blocks = self.solid_blocks
-        self.solid_blocks = pygame.sprite.Group()
         self.load_map()
-        # for _ in range(random.randint(1, 25)):
-        #     Coin().add(self.coins, self.objects)
-        # for _ in range(random.randint(1, 15)):
-        #     Spike().add(self.spikes, self.objects)
-        # for _ in range(random.randint(1, 10)):
-        #     Medkit().add(self.medkits, self.objects)
-        spike = Spike(image=SPIKE)
         self.player = Player()
         self.player.add(self.objects)
         self.played = 0.0

@@ -115,5 +115,5 @@ MAP = {
     'F': FOOD[0],
 }
 
-SOLID_BLOCKS = 'BS'
+SOLID_BLOCKS = 'B'
 

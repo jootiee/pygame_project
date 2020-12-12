@@ -2,8 +2,8 @@
          C       
    C             
                 
- C          PP  
-                
+ C     F    PP  
+          BB    
  S  S   C    S  
 BBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBB
