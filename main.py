@@ -138,6 +138,15 @@ class Player(Sprite):
 
         self.rect.x += self.speed_x
 
+        for block in self.solid_blocks:
+            if pygame.sprite.collide_rect(self, block):
+                if self.speed_x < 0:
+                    self.rect.left = block.rect.right
+                    self.speed_x = 0
+                else:
+                    self.rect.right = block.rect.left
+                    self.speed_x = 0
+
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > WIN_SIZE[0]:
@@ -154,8 +163,6 @@ class Player(Sprite):
                 if pygame.sprite.collide_rect(self, coin):
                     self.money += coin.value
                     coin.kill()
-        else:
-            return True
 
         if self.spikes:
             for spike in self.spikes:
@@ -208,7 +215,6 @@ class Game:
         self.player = Player()
         self.player.add(self.objects)
         self.played = 0.0
-        self.coins_collected = False
         self.endgame_timecode = None
         self.countdown = False
 
@@ -276,6 +282,7 @@ class Game:
             if self.countdown <= 0:
                 self.running = False
         self.coins.update()
+        print(Player.coins)
 
     def render(self):
         self.display.fill(BG_COLOR)
