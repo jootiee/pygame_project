@@ -10,7 +10,7 @@ from config import *
 
 
 class Sprite(pygame.sprite.Sprite):
-    def __init__(self, x=0, y=0, size=100, speed=0, image=PLAYER_ASSETS['idle']):
+    def __init__(self, x=0, y=0, size=TILE_SIZE, speed=0, image=PLAYER_ASSETS['idle']):
         pygame.sprite.Sprite.__init__(self)
         self.size = size
         self.speed = speed
@@ -98,6 +98,8 @@ class Player(Sprite):
         self.speed_y = 0
         self.jump_force = 10
         self.speed_x = 0
+        self.accel_x = 3
+        self.speed_x_max = 6
 
     def update(self, up, down, left, right, ms):
         self.collide_check(ms)
@@ -113,28 +115,44 @@ class Player(Sprite):
 
         self.rect.bottom += self.speed_y
 
+        is_bottom_colliding = False
+
         for block in self.solid_blocks:
             if pygame.sprite.collide_rect(self, block):
-                if self.speed_y < 0:
-                    self.rect.top = block.rect.bottom
-                    self.speed_y = 0
-                else:
-                    self.rect.bottom = block.rect.top
-                    self.on_ground = True
+                    if self.speed_y < 0:
+                        self.rect.top = block.rect.bottom
+                        self.speed_y = 0
+                    else:
+                        self.rect.bottom = block.rect.top
+                        self.on_ground = True
+            if 0 <= self.rect.x - block.rect.x <= TILE_SIZE:
+                if block.rect.top == self.rect.bottom:
+                    is_bottom_colliding = True
                 
+        self.on_ground = is_bottom_colliding
+
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > WIN_SIZE[1]:
             self.rect.bottom = WIN_SIZE[1]
 
+        #x movement
         if left == right:
-            self.speed_x = 0
+            self.speed_x *= 0.9
+            if abs(self.speed_x) < .5:
+                self.speed_x = 0
         elif left:
-            self.speed_x = -self.speed
+            self.speed_x -= self.accel_x
+            if abs(self.speed_x) >self.speed_x_max:
+                self.speed_x = -self.speed_x_max
             self.image = self.image_flipped
-        else:
-            self.speed_x = +self.speed
-            self.image = self.image_main
+        elif right:
+            self.speed_x += self.accel_x
+            if abs(self.speed_x) > self.speed_x_max:
+                self.speed_x = self.speed_x_max
+            self.image = self.image_main 
+
+        print(self.speed_x)
 
         self.rect.x += self.speed_x
 
@@ -282,7 +300,7 @@ class Game:
             if self.countdown <= 0:
                 self.running = False
         self.coins.update()
-        print(Player.coins)
+        # print(Player.coins)
 
     def render(self):
         self.display.fill(BG_COLOR)
