@@ -125,7 +125,7 @@ class Player(Sprite):
                     else:
                         self.rect.bottom = block.rect.top
                         self.on_ground = True
-            if 0 <= self.rect.x - block.rect.x <= TILE_SIZE:
+            if -TILE_SIZE <= self.rect.x - block.rect.x <= TILE_SIZE:
                 if block.rect.top == self.rect.bottom:
                     is_bottom_colliding = True
                 
