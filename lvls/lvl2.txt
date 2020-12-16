@@ -1,9 +1,9 @@
-
-
-C
-                            
-    C
-            M
-           MMM
-BBBBBBBBBBBBBBBB
+            C   
+                
+                
+   P      P     
+                
+     PP         
+                
+          P     
 BBBBBBBBBBBBBBBB

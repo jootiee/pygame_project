@@ -13,6 +13,10 @@ current_dir = os.path.dirname(__file__)
 assets = os.path.join(current_dir, 'assets')
 lvls = os.path.join(current_dir, 'lvls')
 
+# objects = os.path.join(current_dir, 'objects')
+# parents = os.path.join(objects, 'parents.py')
+
+BACKGROUND = os.path.join(assets, 'background.png')
 CAT = os.path.join(assets, 'cat.png')
 PEPEGA = os.path.join(assets, 'pepega.png')
 RAT = os.path.join(assets, 'rat.png')
@@ -101,11 +105,13 @@ COINS = [os.path.join(coins, 'Coin_Blue.png'),
          os.path.join(coins, 'Coin_Purple.png'),
          os.path.join(coins, 'Coin_Red.png')]
 
-LEVELS = [os.path.join(lvls, 'lvl1.txt')]
+LEVELS = [os.path.join(lvls, 'lvl1.txt'),
+          os.path.join(lvls, 'lvl2.txt')]
 
 
-BLOCK_ASSETS = {'ground': os.path.join(blocks, 'ground.png')}
-
+BLOCK_ASSETS = {'ground': os.path.join(blocks, 'ground.png'),
+                'platform': os.path.join(blocks, 'platform.png')
+}
 
 
 MAP = {
@@ -113,7 +119,7 @@ MAP = {
     'B': BLOCK_ASSETS['ground'],
     'S': SPIKE,
     'F': FOOD[0],
+    'P': BLOCK_ASSETS['platform']
 }
 
-SOLID_BLOCKS = 'B'
-
+SOLID_BLOCKS = 'BP'
