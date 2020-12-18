@@ -1,14 +1,14 @@
 from config import *
-import pygame
+import pygame as pg
 
 
-class Sprite(pygame.sprite.Sprite):
-    def __init__(self, x=0, y=0, size=TILE_SIZE, speed=0, image=PEPEGA):
-        pygame.sprite.Sprite.__init__(self)
+class Sprite(pg.sprite.Sprite):
+    def __init__(self, x=0, y=0, size=TILE_SIZE, speed=0, image=MISSING):
+        pg.sprite.Sprite.__init__(self)
         self.size = size
         self.speed = speed
-        self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.image = pg.image.load(image)
+        self.image = pg.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(x, y)
 

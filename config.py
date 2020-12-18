@@ -6,48 +6,39 @@ WIN_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
 FPS = 60
 GRAVITY = 0.4
 
-WHITE = (255, 255, 255)
-BLACK = (0,   0,   0)
-BG_COLOR = (76, 81, 109)
-
 current_dir = os.path.dirname(__file__)
 assets = os.path.join(current_dir, 'assets')
 lvls = os.path.join(current_dir, 'lvls')
 
-# objects = os.path.join(current_dir, 'objects')
-# parents = os.path.join(objects, 'parents.py')
-
-BACKGROUND = os.path.join(assets, 'background.png')
-CAT = os.path.join(assets, 'cat.png')
-PEPEGA = os.path.join(assets, 'pepega.png')
-RAT = os.path.join(assets, 'rat.png')
-SILVER_COIN = os.path.join(assets, 'silver.png')
-GOLD_COIN = os.path.join(assets, 'gold.png')
-SPIKE = os.path.join(assets, 'spike.png')
-MEDKIT = os.path.join(assets, 'medkit.png')
-
+# solid blocks dir
 blocks = os.path.join(assets, 'blocks')
-consumable = os.path.join(assets, 'consumables')
+
+# consumable items dir
+consumables = os.path.join(assets, 'consumables')
+heal = os.path.join(consumables, 'heal')
+
+# player animations dirs
 char = os.path.join(assets, 'char')
-
-heal = os.path.join(consumable, 'heal')
-
 idle_dir = os.path.join(char, 'idle')
 walk_dir = os.path.join(char, 'walk')
 jump_dir = os.path.join(char, 'jump')
+
+BACKGROUND = os.path.join(assets, 'background.png')
+BLANK_SCREEN = pg.image.load(os.path.join(assets, 'blank.png'))
+HITTING = pg.image.load(os.path.join(assets, 'take_hit_true.png'))
+MISSING = os.path.join(assets, 'pepega.png')
+SPIKE = os.path.join(assets, 'spike.png')
 
 def flipped(lib):
     return [pg.transform.flip(pic, True, False) for pic in lib]
 
 PLAYER_ASSETS = {'idle': [pg.image.load(os.path.join(idle_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(idle_dir)]))],
                  'walk': [pg.image.load(os.path.join(walk_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(walk_dir)]))],
-                 'jump': [pg.image.load(os.path.join(jump_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(jump_dir)]))]
-}
+                 'jump': [pg.image.load(os.path.join(jump_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(jump_dir)]))]}
 
 PLAYER_ASSETS_FLIPPED = {'idle': flipped(PLAYER_ASSETS['idle']),
                          'walk': flipped(PLAYER_ASSETS['walk']),
-                         'jump': flipped(PLAYER_ASSETS['jump'])
-}
+                         'jump': flipped(PLAYER_ASSETS['jump'])}
 
 FOOD = [os.path.join(heal, 'Apple.png'),
         os.path.join(heal, 'AppleWorm.png'),
@@ -114,7 +105,7 @@ FOOD = [os.path.join(heal, 'Apple.png'),
         os.path.join(heal, 'Whiskey.png'),
         os.path.join(heal, 'Wine.png')]
 
-coins = os.path.join(consumable, 'coins')
+coins = os.path.join(consumables, 'coins')
 COINS = [os.path.join(coins, 'Coin_Purple.png'),
          os.path.join(coins, 'Coin_Blue.png'),
          os.path.join(coins, 'Coin_Gold.png'),
@@ -136,7 +127,6 @@ MAP = {
     'S': SPIKE,
     'F': FOOD[0],
     'P': BLOCK_ASSETS['platform'],
-    'R': PLAYER_ASSETS['idle']
-}
+    'R': PLAYER_ASSETS['idle']}
 
 SOLID_BLOCKS = 'BP'
