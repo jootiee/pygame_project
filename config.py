@@ -1,9 +1,10 @@
 ﻿import os
+import pygame
 
 TILE_SIZE = 64
 WIN_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
 FPS = 60
-GRAVITY = 0.25
+GRAVITY = 0.4
 
 WHITE = (255, 255, 255)
 BLACK = (0,   0,   0)
@@ -31,7 +32,16 @@ char = os.path.join(assets, 'char')
 
 heal = os.path.join(consumable, 'heal')
 
-PLAYER_ASSETS = {'idle': os.path.join(char, 'character.png')}
+idle_dir = os.path.join(char, 'idle')
+
+def flipped(lib):
+    return [pygame.transform.flip(pic, True, False) for pic in lib]
+
+PLAYER_ASSETS = {'idle': [pygame.image.load(os.path.join(idle_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(idle_dir)]))]
+}
+
+PLAYER_ASSETS_FLIPPED = {'idle': flipped(PLAYER_ASSETS['idle'])
+}
 
 FOOD = [os.path.join(heal, 'Apple.png'),
         os.path.join(heal, 'AppleWorm.png'),
@@ -111,7 +121,7 @@ LEVELS = [os.path.join(lvls, 'lvl1.txt'),
 
 BLOCK_ASSETS = {'ground': os.path.join(blocks, 'ground.png'),
                 'platform': os.path.join(blocks, 'platform.png')
-}
+                }
 
 
 MAP = {
@@ -119,7 +129,8 @@ MAP = {
     'B': BLOCK_ASSETS['ground'],
     'S': SPIKE,
     'F': FOOD[0],
-    'P': BLOCK_ASSETS['platform']
+    'P': BLOCK_ASSETS['platform'],
+    'R': PLAYER_ASSETS['idle']
 }
 
 SOLID_BLOCKS = 'BP'

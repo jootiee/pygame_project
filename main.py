@@ -20,11 +20,10 @@ class Game:
         self.running = True
         self.down = self.up = self.left = self.right = False
         self.played = 0.0
-        self.endgame_timecode = None
-        self.countdown = False
+        self.player_created = False
         self.level = 0
+        self.player = Player()
         self.load_map()
-        
 
     def load_sprites(self):
         self.objects = pygame.sprite.Group()
@@ -37,11 +36,10 @@ class Game:
         Player.spikes = self.spikes
         Player.medkits = self.medkits
         Player.solid_blocks = self.solid_blocks
-        self.player = Player()
-        self.player.add(self.objects)
 
     def restart(self):
         self.level = 0
+        self.player = Player()
         self.load_map()
 
     def load_map(self):
@@ -107,16 +105,11 @@ class Game:
         pygame.display.set_caption(
             f"Player's money: {self.player.money}. Player's hp: {self.player.hp} Played: {self.played:.2f}")
         self.player.update(self.up, self.down, self.left, self.right, ms)
-        if self.player.update(self.up, self.down, self.left, self.right, ms) and not self.countdown:
-            self.countdown = 5.0
-        if self.countdown:
-            self.countdown -= ms / 1000
-            if self.countdown <= 0:
-                self.running = False
         self.coins.update()
 
         if not self.coins:
-            self.level += 1
+            if self.level < len(LEVELS) - 1:
+                self.level += 1
             self.load_map()
 
     def render(self):

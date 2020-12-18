@@ -6,35 +6,51 @@ class Player(Sprite):
     coins = None
     medkits = None
     damage = None
+    frames = 0
 
-    def __init__(self, x=0, y=0, size=96, speed=10, image=PLAYER_ASSETS['idle']):
+    def __init__(self, x=150, y=150, size=96, speed=10, image=PEPEGA):
         Sprite.__init__(self, x, y, size, speed, image)
         self.money = 0
         self.hp_max = 100
         self.hp_start = self.hp_max
         self.hp = self.hp_start
-        self.x = x
-        self.y = y
-        self.x0 = self.x
-        self.y0 = self.y
-        Sprite.__init__(self, self.x, self.y, size, speed, image)
         self.image_main = self.image
-        self.image_flipped = pygame.transform.flip(self.image, True, False)
+        self.image_flipped = False
         self.delay = 500
         self.cooldown = self.delay
         self.on_ground = False
         self.speed_y = 0
-        self.jump_force = 9
+        self.jump_force = 10
         self.speed_x = 0
         self.accel_x = 2
-        self.speed_x_max = 5
+        self.speed_x_max = 7
+        self.x0 = x
+        self.y0 = y
+        self.tick = 0
+        self.frames = 0
+        self.animation_speed = 6
 
     def set_position(self, x, y):
         self.rect.x, self.rect.y = x, y
 
-
     def update(self, up, down, left, right, ms):
         self.collide_check(ms)
+
+        self.frames += ms
+        if not self.frames % (FPS // self.animation_speed):
+            self.tick += 1
+        if self.tick + 1 >= len(PLAYER_ASSETS['idle']):
+            self.tick = 0
+
+        if up or down or left or right:
+            self.tick = 0
+
+        if self.image_flipped:
+            self.image = pygame.transform.scale(PLAYER_ASSETS_FLIPPED['idle'][self.tick], (self.size, self.size))
+        else:
+            self.image = pygame.transform.scale(PLAYER_ASSETS['idle'][self.tick], (self.size, self.size))
+
+
         if up == down:
             pass
         if not self.on_ground:
@@ -78,12 +94,12 @@ class Player(Sprite):
             self.speed_x -= self.accel_x
             if abs(self.speed_x) > self.speed_x_max:
                 self.speed_x = -self.speed_x_max
-            self.image = self.image_flipped
+            self.image_flipped = True
         elif right:
             self.speed_x += self.accel_x
             if abs(self.speed_x) > self.speed_x_max:
                 self.speed_x = self.speed_x_max
-            self.image = self.image_main
+            self.image_flipped = False
 
         self.rect.x += self.speed_x
 
@@ -139,5 +155,5 @@ class Player(Sprite):
 
     def respawn(self):
         self.money = round(self.money * 0.9)
-        self.rect.topleft = (self.x0, self.y0)
+        self.rect.topleft = self.x0, self.y0
         self.hp = self.hp_max
