@@ -42,14 +42,13 @@ class Player(Sprite):
         if self.tick + 1 >= len(PLAYER_ASSETS['idle']):
             self.tick = 0
 
-        if up or down or left or right:
-            self.tick = 0
-
-        if self.image_flipped:
-            self.image = pygame.transform.scale(PLAYER_ASSETS_FLIPPED['idle'][self.tick], (self.size, self.size))
+        if self.on_ground:
+            if self.image_flipped:
+                self.image = pygame.transform.scale(PLAYER_ASSETS_FLIPPED['idle'][self.tick], (self.size, self.size))
+            else:
+                self.image = pygame.transform.scale(PLAYER_ASSETS['idle'][self.tick], (self.size, self.size))
         else:
-            self.image = pygame.transform.scale(PLAYER_ASSETS['idle'][self.tick], (self.size, self.size))
-
+            self.tick = 0
 
         if up == down:
             pass
@@ -94,11 +93,15 @@ class Player(Sprite):
             self.speed_x -= self.accel_x
             if abs(self.speed_x) > self.speed_x_max:
                 self.speed_x = -self.speed_x_max
+            # self.tick = 0
+            self.image = pygame.transform.scale(PLAYER_ASSETS_FLIPPED['walk'][self.tick], (self.size, self.size))
             self.image_flipped = True
         elif right:
             self.speed_x += self.accel_x
             if abs(self.speed_x) > self.speed_x_max:
                 self.speed_x = self.speed_x_max
+            # self.tick = 0
+            self.image = pygame.transform.scale(PLAYER_ASSETS['walk'][self.tick], (self.size, self.size))
             self.image_flipped = False
 
         self.rect.x += self.speed_x

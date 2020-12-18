@@ -1,5 +1,5 @@
 ﻿import os
-import pygame
+import pygame as pg
 
 TILE_SIZE = 64
 WIN_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
@@ -33,14 +33,20 @@ char = os.path.join(assets, 'char')
 heal = os.path.join(consumable, 'heal')
 
 idle_dir = os.path.join(char, 'idle')
+walk_dir = os.path.join(char, 'walk')
+jump_dir = os.path.join(char, 'jump')
 
 def flipped(lib):
-    return [pygame.transform.flip(pic, True, False) for pic in lib]
+    return [pg.transform.flip(pic, True, False) for pic in lib]
 
-PLAYER_ASSETS = {'idle': [pygame.image.load(os.path.join(idle_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(idle_dir)]))]
+PLAYER_ASSETS = {'idle': [pg.image.load(os.path.join(idle_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(idle_dir)]))],
+                 'walk': [pg.image.load(os.path.join(walk_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(walk_dir)]))],
+                 'jump': [pg.image.load(os.path.join(jump_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(jump_dir)]))]
 }
 
-PLAYER_ASSETS_FLIPPED = {'idle': flipped(PLAYER_ASSETS['idle'])
+PLAYER_ASSETS_FLIPPED = {'idle': flipped(PLAYER_ASSETS['idle']),
+                         'walk': flipped(PLAYER_ASSETS['walk']),
+                         'jump': flipped(PLAYER_ASSETS['jump'])
 }
 
 FOOD = [os.path.join(heal, 'Apple.png'),
@@ -109,10 +115,10 @@ FOOD = [os.path.join(heal, 'Apple.png'),
         os.path.join(heal, 'Wine.png')]
 
 coins = os.path.join(consumable, 'coins')
-COINS = [os.path.join(coins, 'Coin_Blue.png'),
+COINS = [os.path.join(coins, 'Coin_Purple.png'),
+         os.path.join(coins, 'Coin_Blue.png'),
          os.path.join(coins, 'Coin_Gold.png'),
          os.path.join(coins, 'Coin_Green.png'),
-         os.path.join(coins, 'Coin_Purple.png'),
          os.path.join(coins, 'Coin_Red.png')]
 
 LEVELS = [os.path.join(lvls, 'lvl1.txt'),
