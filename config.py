@@ -29,16 +29,11 @@ HITTING = pg.image.load(os.path.join(assets, 'take_hit_true.png'))
 MISSING = os.path.join(assets, 'pepega.png')
 SPIKE = os.path.join(assets, 'spike.png')
 
-def flipped(lib):
-    return [pg.transform.flip(pic, True, False) for pic in lib]
 
-PLAYER_ASSETS = {'idle': [pg.image.load(os.path.join(idle_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(idle_dir)]))],
-                 'walk': [pg.image.load(os.path.join(walk_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(walk_dir)]))],
-                 'jump': [pg.image.load(os.path.join(jump_dir, f'{n}.png')) for n in range(len([f for f in os.listdir(jump_dir)]))]}
+PLAYER_ASSETS = {'idle': [os.path.join(idle_dir, f'{n}.png') for n in range(len([f for f in os.listdir(idle_dir)]))],
+                 'walk': [os.path.join(walk_dir, f'{n}.png') for n in range(len([f for f in os.listdir(walk_dir)]))],
+                 'jump': [os.path.join(jump_dir, f'{n}.png') for n in range(len([f for f in os.listdir(jump_dir)]))]}
 
-PLAYER_ASSETS_FLIPPED = {'idle': flipped(PLAYER_ASSETS['idle']),
-                         'walk': flipped(PLAYER_ASSETS['walk']),
-                         'jump': flipped(PLAYER_ASSETS['jump'])}
 
 FOOD = [os.path.join(heal, 'Apple.png'),
         os.path.join(heal, 'AppleWorm.png'),
@@ -112,9 +107,7 @@ COINS = [os.path.join(coins, 'Coin_Purple.png'),
          os.path.join(coins, 'Coin_Green.png'),
          os.path.join(coins, 'Coin_Red.png')]
 
-LEVELS = [os.path.join(lvls, 'lvl1.txt'),
-          os.path.join(lvls, 'lvl2.txt')]
-
+LEVELS = [os.path.join(lvls, f'lvl{n}') for n in range(len([f for f in os.listdir(lvls)]))]
 
 BLOCK_ASSETS = {'ground': os.path.join(blocks, 'ground.png'),
                 'platform': os.path.join(blocks, 'platform.png')

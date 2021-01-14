@@ -3,18 +3,14 @@ import random
 import os
 import math
 
-
-# config import
 from config import *
-
-# objects import
 from player import *
 from props import *
 from hud import *
 
 
 class Game:
-    # intializations
+
     def __init__(self):
         pg.init()
         self.display = pg.display.set_mode(WIN_SIZE)
