@@ -40,13 +40,14 @@ class Coin(Sprite):
         self.forward = 1
         self.spawn = self.rect.topleft
         self.value = value
+        self.animated = True
 
     def update(self, *args):
         if self.ticks >= 360:
             self.ticks -= 360
         self.ticks += 5
 
-        # if is a coin without animation
+        # if no animation
         if not self.speed:
             return
         dy = math.sin(math.radians(self.ticks)) * self.speed

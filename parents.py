@@ -13,6 +13,7 @@ class Sprite(pg.sprite.Sprite):
         self.image = pg.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(x, y)
+        self.animated = False
 
     def draw(self, surface):
         surface.blit(self.image, self.rect.topleft)
@@ -56,6 +57,4 @@ class Sprite(pg.sprite.Sprite):
                 self.image = pg.transform.scale(self.pictures['jump_flipped'][self.tick], (self.size, self.size))
             else:
                 self.image = pg.transform.scale(self.pictures['jump'][self.tick], (self.size, self.size))
-
-        print(self.tick)
     

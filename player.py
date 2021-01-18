@@ -51,6 +51,8 @@ class Player(Sprite):
         # count for animation pick
         self.animation_tick_count()
 
+        # print(self.rect.x, self.rect.y)
+
         # jumping and falling (y movement)
         if up == down:
             pass
@@ -132,10 +134,10 @@ class Player(Sprite):
                     self.money += coin.value
                     coin.kill()
 
-        # if self.spikes:
-        #     for spike in self.spikes:
-        #         if pg.sprite.collide_rect(self, spike):
-        #             self.hp -= self.take_damage(ms, spike.damage)
+        if self.spikes:
+            for spike in self.spikes:
+                if pg.sprite.collide_rect(self, spike):
+                    self.hp -= self.take_damage(ms, spike.damage)
 
         # if self.medkits:
         #     for medkit in self.medkits:

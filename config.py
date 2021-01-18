@@ -3,6 +3,7 @@ import pygame as pg
 
 TILE_SIZE = 64
 WIN_SIZE = (16 * TILE_SIZE, 9 * TILE_SIZE)
+# WIN_SIZE = (1920, 1080)
 FPS = 60
 GRAVITY = 0.4
 
@@ -110,16 +111,19 @@ COINS = [os.path.join(coins, 'Coin_Purple.png'),
 LEVELS = [os.path.join(lvls, f'lvl{n}') for n in range(len([f for f in os.listdir(lvls)]))]
 
 BLOCK_ASSETS = {'ground': os.path.join(blocks, 'ground.png'),
-                'platform': os.path.join(blocks, 'platform.png')
+                'platform': os.path.join(blocks, 'platform.png'),
+                'border': os.path.join(blocks, 'border.png')
                 }
 
 
 MAP = {
     'C': COINS[0],
-    'B': BLOCK_ASSETS['ground'],
+    'G': BLOCK_ASSETS['ground'],
     'S': SPIKE,
     'F': FOOD[0],
     'P': BLOCK_ASSETS['platform'],
-    'R': PLAYER_ASSETS['idle']}
+    'R': PLAYER_ASSETS['idle'],
+    'B': BLOCK_ASSETS['border']
+    }
 
-SOLID_BLOCKS = 'BP'
+SOLID_BLOCKS = 'GBP'

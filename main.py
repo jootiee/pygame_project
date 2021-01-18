@@ -7,6 +7,7 @@ from config import *
 from player import *
 from props import *
 from hud import *
+from camera import *
 
 
 class Game:
@@ -40,6 +41,7 @@ class Game:
         Player.spikes = self.spikes
         Player.medkits = self.medkits
         Player.solid_blocks = self.solid_blocks
+        self.camera = Camera(self.player, self.objects)
 
     # restarts the game, resets player stats
     def restart(self):
@@ -70,6 +72,8 @@ class Game:
                             block = Coin(*pos, value=5, image=image)
                             self.coins.add(block)
                         self.objects.add(block)
+        self.camera.update_borders()
+
 
     # game run
     def run(self):
@@ -113,6 +117,7 @@ class Game:
         self.played += ms / 1000
         pg.display.set_caption(
             f"Player's money: {self.player.money}. Player's hp: {self.player.hp} Played: {self.played:.2f}")
+        self.camera.update()
         self.player.update(self.up, self.down, self.left, self.right, ms)
         self.coins.update()
         self.hud.update()
